@@ -1,0 +1,55 @@
+# ============================================
+# 携程旅行助手 - Python 依赖清单
+# ============================================
+
+# ---------- Web 框架 ----------
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+starlette>=0.35.0
+
+# ---------- 数据库 ----------
+sqlalchemy>=2.0.0
+pymysql>=1.1.0              # MySQL 驱动
+aiomysql>=0.2.0             # 异步 MySQL 驱动 (可选)
+
+# ---------- 数据验证 ----------
+pydantic>=2.10.0
+pydantic-settings>=2.5.0
+
+# ---------- 配置管理 ----------
+dynaconf>=3.2.0
+python-dotenv>=1.0.0
+
+# ---------- 认证安全 ----------
+python-jose[cryptography]>=3.3.0    # JWT
+passlib[bcrypt]>=1.7.4              # 密码哈希
+
+# ---------- AI/LLM 框架 ----------
+langchain>=1.2.0
+langchain-core>=1.2.0
+langchain-community>=0.3.0
+langchain-openai>=1.1.0
+langgraph>=1.1.0
+deepagents>=0.5.0
+langchain-mcp-adapters>=0.1.0
+langgraph-checkpoint-postgres>=1.0.0
+
+# ---------- AI 模型 SDK ----------
+openai>=1.0.0
+zhipuai>=2.0.0              # 智谱 AI
+
+# ---------- 向量检索 ----------
+numpy>=1.24.0
+
+# ---------- 网络搜索 ----------
+tavily-python>=0.3.0        # Tavily 搜索 (可选)
+
+# ---------- 工具库 ----------
+pytz>=2024.1                # 时区处理
+httpx>=0.26.0               # HTTP 客户端
+aiofiles>=23.2.0            # 异步文件操作
+
+# ---------- 开发/测试 (可选) ----------
+# pytest>=8.0.0
+# pytest-asyncio>=0.23.0
+# httpx>=0.26.0              # 测试客户端
