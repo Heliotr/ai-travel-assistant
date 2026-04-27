@@ -114,12 +114,12 @@ async def register(user_data: UserRegisterSchema, db: Session = Depends(get_db))
 
 
 @router.post('/login/', response_model=dict, description='用户登录', summary='用户登录')
-async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def login(user_data: UserLoginSchema, db: Session = Depends(get_db)):
     """
     用户登录接口
-    使用 OAuth2 表单格式
+    使用 JSON 格式
     """
-    user = authenticate_user(db, form_data.username, form_data.password)
+    user = authenticate_user(db, user_data.username, user_data.password)
     if not user:
         log.warning(f'[User Login Failed] 用户名或密码错误: {form_data.username}')
         raise HTTPException(
