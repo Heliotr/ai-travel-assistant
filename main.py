@@ -10,8 +10,6 @@ load_dotenv()
 import uvicorn
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
 from pathlib import Path
 
 from api.routers import init_routers
@@ -30,9 +28,8 @@ def validate_env():
     print("[OK] Environment validated")
 
 
-# 静态文件目录
+# 项目根目录
 BASE_DIR = Path(__file__).resolve().parent
-STATIC_DIR = BASE_DIR / "static" / "dist"
 
 def custom_openapi(app: FastAPI):
     """自定义 OpenAPI 文档"""
@@ -89,12 +86,6 @@ def create_app() -> FastAPI:
 
     # 注册路由
     init_routers(app)
-
-    # 先挂载 /assets 静态文件
-    app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
-
-    # 再挂载其他静态文件 (根路径，启用html=True自动提供index.html)
-    app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")
 
     # 添加健康检查接口
     @app.get("/health", tags=["健康检查"])
