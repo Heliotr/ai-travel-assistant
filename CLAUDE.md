@@ -43,8 +43,7 @@ new_graph_chat_export/
 ├── api/                        # API 层
 ├── config/                     # 配置
 ├── utils/                      # 工具函数
-├── db/                         # 数据库
-└── static/src/                 # 前端 (Vue 3)
+└── db/                         # 数据库
 ```
 
 ### 关键文件
@@ -56,7 +55,6 @@ new_graph_chat_export/
 | `tools/*.py` | 业务工具实现 |
 | `api/graph_api/new_graph_views.py` | API 接口 |
 | `main.py` | FastAPI 应用入口 |
-| `app.py` | Streamlit 测试界面 |
 
 ## 最近优化 (2026-04-25)
 
@@ -111,6 +109,76 @@ new_graph_chat_export/
 - **问题**: 前端缺少构建配置文件，无法启动
 - **解决**: 创建 static/package.json、static/vite.config.js
 - **启动命令**: `cd static && npm install && npm run build`
+
+### 7. 登录接口修复
+- **问题**: 前端发送 JSON 格式，后端只支持 OAuth2 表单格式
+- **解决**: 修改登录接口支持 JSON 格式
+- **修改文件**: `api/system_mgt/user_views.py`
+
+### 8. 删除前端代码
+- **原因**: 准备重写前端
+- **删除内容**: 移除 static/ 目录和 main.py 中的静态文件相关代码
+- **注意**: API 接口保持不变，可供新前端调用
+
+## API 接口文档
+
+### 基础配置
+- Base URL: `http://localhost:8000`
+- Content-Type: `application/json`
+
+### 用户接口
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/register/` | 用户注册 |
+| POST | `/api/login/` | 用户登录 |
+| GET | `/api/profile/` | 获取当前用户信息（需认证） |
+
+### 工作流接口
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/new_graph/` | 同步调用工作流 |
+| POST | `/api/new_graph/stream/` | 流式调用工作流 |
+
+### 请求示例
+
+**用户注册**:
+```json
+POST /api/register/
+{
+  "username": "testuser",
+  "password": "test123456",
+  "phone": "13800138000",
+  "real_name": "张三"
+}
+```
+
+**用户登录**:
+```json
+POST /api/login/
+{
+  "username": "testuser",
+  "password": "test123456"
+}
+```
+
+**调用工作流**:
+```json
+POST /api/new_graph/
+{
+  "user_input": "帮我查一下明天上海到北京的航班"
+}
+```
+
+**响应**:
+```json
+{
+  "assistant": "您好！根据您的需求...",
+  "interrupted": false,
+  "error": null
+}
+```
 
 ## 开发规范
 
