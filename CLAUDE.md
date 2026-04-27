@@ -77,8 +77,40 @@ new_graph_chat_export/
 
 ### 4. Streamlit 测试界面
 - **功能**: 添加纯白色简洁风格的测试界面
-- **���动**: `streamlit run app.py --server.port 8502`
+- **启动**: `streamlit run app.py --server.port 8502`
 - **地址**: http://localhost:8502
+
+## 最近优化 (2026-04-27)
+
+### 1. 后端路由修复
+- **问题**: `api/routers.py` 引用了不存在的模块 (deep_agent_views)
+- **解决**: 更新路由配置，使用现有的 new_graph_views
+- **修改文件**: `api/routers.py`
+
+### 2. 缺失文件创建
+- **问题**: 缺少用户管理相关文件，导致启动失败
+- **解决**: 创建了 api/system_mgt/user_schemas.py、user_views.py
+- **修改文件**: `api/system_mgt/*.py`
+
+### 3. 配置文件修复
+- **问题**: 配置文件缺失 (development.yml)，导致配置项加载失败
+- **解决**: 修改 config/__init__.py，从 .env 加载配置并设置默认值
+- **修改文件**: `config/__init__.py`, `config/log_config.py`
+
+### 4. 编码问题修复
+- **问题**: Windows 环境下 print 输出 emoji 字符时报编码错误
+- **解决**: 在 my_print.py 中强制设置 UTF-8 编码
+- **修改文件**: `new_graph_chat/my_print.py`
+
+### 5. bcrypt 兼容性修复
+- **问题**: passlib 与 bcrypt 5.0.0 不兼容
+- **解决**: 降级 bcrypt 到 4.3.0
+- **修改命令**: `pip install "bcrypt<5.0.0"`
+
+### 6. 前端构建配置
+- **问题**: 前端缺少构建配置文件，无法启动
+- **解决**: 创建 static/package.json、static/vite.config.js
+- **启动命令**: `cd static && npm install && npm run build`
 
 ## 开发规范
 
@@ -145,7 +177,21 @@ YYYY-MM-DD
   - `DEEPSEEK_API_KEY`: DeepSeek API 密钥
   - `ZHIPU_API_KEY`: 智谱AI API 密钥
 
-### 启动命令
+### 开发规范
+
+#### 端口资源管理
+> **每次测试完成后，必须释放端口资源**
+
+- 使用后台运行服务时，测试完成后使用 `TaskStop` 停止任务
+- 避免端口占用导致下次启动失败
+- Windows 上可以使用 `netstat -ano | findstr :8000` 查看端口占用
+
+#### 2. 代码提交规范
+> **每次修改代码后，必须提交到 GitHub**
+
+- 使用 git 提交所有修改的文件
+- 提交信息要清晰描述本次修改的内容
+- 禁止直接 push 到 main 分支，应创建 feature 分支或使用 PR
 
 ```bash
 # 激活虚拟环境
